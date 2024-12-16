@@ -1,53 +1,41 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useTenant } from '@/contexts/TenantContext'
 
-type FetchFunction<T> = (tenantCode: string) => Promise<T>
+interface TenantData<T> {
+  data: T | null
+  isLoading: boolean
+  error: Error | null
+}
 
 export function useTenantData<T>(
-  fetchData: FetchFunction<T>,
-  dependencies: any[] = []
-) {
-  const { currentTenant } = useTenant()
-  const [data, setData] = useState<T | null>(null)
+  fetchData: (tenantCode: string) => Promise<T>,
+  initialData: T | null = null
+): TenantData<T> {
+  const [data, setData] = useState<T | null>(initialData)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const { currentTenant } = useTenant()
 
-  // Memoize the fetchData function to prevent infinite loops
-  const memoizedFetchData = useCallback(fetchData, dependencies)
+  const loadData = useCallback(async () => {
+    if (!currentTenant) return
+
+    try {
+      setIsLoading(true)
+      setError(null)
+      const result = await fetchData(currentTenant.code)
+      setData(result)
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Unknown error'))
+    } finally {
+      setIsLoading(false)
+    }
+  }, [currentTenant, fetchData])
 
   useEffect(() => {
-    let isMounted = true
-
-    const fetchDataForTenant = async () => {
-      if (!currentTenant) return
-
-      setIsLoading(true)
-      try {
-        const result = await memoizedFetchData(currentTenant.code)
-        if (isMounted) {
-          setData(result)
-          setError(null)
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err as Error)
-          setData(null)
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    fetchDataForTenant()
-
-    return () => {
-      isMounted = false
-    }
-  }, [currentTenant?.code, memoizedFetchData])
+    loadData()
+  }, [loadData])
 
   return { data, isLoading, error }
 } 

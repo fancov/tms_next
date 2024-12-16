@@ -7,7 +7,6 @@ import { areaTreeData } from '@/data/case/treeData'
 import { testCases, TestCase } from '@/data/case/testData'
 import { ColumnConfig, type ColumnDef } from '@/components/ColumnConfig'
 import { useTenantData } from '@/hooks/useTenantData'
-import Link from 'next/link'
 import {
   DndContext,
   closestCenter,

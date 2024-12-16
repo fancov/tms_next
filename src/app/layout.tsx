@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <TenantProvider>
           <MainNav />
-          <main className="pt-14">
+          <main>
             {children}
           </main>
         </TenantProvider>

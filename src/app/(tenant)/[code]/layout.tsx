@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { MainNav } from '@/components/MainNav'
+import { useRouter } from 'next/navigation'
 import { useTenant } from '@/contexts/TenantContext'
 import React from 'react'
 
@@ -15,7 +14,6 @@ export default function TenantLayout({
 }) {
   const router = useRouter()
   const { currentTenant, tenants, setCurrentTenant } = useTenant()
-  const pathname = usePathname()
   const unwrappedParams = React.use(params) as { code: string }
 
   // 当路由中的租户参数改变时，更新当前租户

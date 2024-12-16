@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, ChevronDown, Folder, Search } from 'lucide-react'
+import { ChevronRight, ChevronDown, Folder } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { TreeNode } from '@/data/case/treeData'
 
@@ -10,7 +10,6 @@ interface TreeViewProps {
 }
 
 interface TreeViewItemProps extends TreeViewProps {
-  isLast: boolean
   level?: number
 }
 
@@ -45,7 +44,7 @@ const nodeContainsText = (node: TreeNode, searchText: string): boolean => {
   return false
 }
 
-const TreeViewItem = ({ node, level = 0, isLast, searchTerm = '' }: TreeViewItemProps) => {
+const TreeViewItem = ({ node, level = 0, searchTerm = '' }: TreeViewItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const hasChildren = node.children && node.children.length > 0
   const paddingLeft = level * 20
@@ -96,12 +95,11 @@ const TreeViewItem = ({ node, level = 0, isLast, searchTerm = '' }: TreeViewItem
       
       {isExpanded && node.children && (
         <div>
-          {node.children.map((child, index: number) => (
+          {node.children.map((child, index) => (
             <TreeViewItem
               key={child.id}
               node={child}
               level={level + 1}
-              isLast={index === node.children!.length - 1}
               searchTerm={searchTerm}
             />
           ))}
@@ -112,5 +110,5 @@ const TreeViewItem = ({ node, level = 0, isLast, searchTerm = '' }: TreeViewItem
 }
 
 export function TreeView({ node, searchTerm }: TreeViewProps) {
-  return <TreeViewItem node={node} isLast={true} searchTerm={searchTerm} />
+  return <TreeViewItem node={node} searchTerm={searchTerm} />
 } 

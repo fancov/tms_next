@@ -10,8 +10,9 @@ import { testCases } from '@/data/case/testData'
 export default function EditCasePage({
   params
 }: {
-  params: { code: string; id: string }
+  params: Promise<{ code: string; id: string }>
 }) {
+  const unwrappedParams = React.use(params)
   const router = useRouter()
   const [formData, setFormData] = useState<Partial<TestCase>>({
     name: '',
@@ -24,7 +25,7 @@ export default function EditCasePage({
 
   // 加载测试用例数据
   useEffect(() => {
-    const testCase = testCases.find(tc => tc.id === params.id)
+    const testCase = testCases.find(tc => tc.id === unwrappedParams.id)
     if (testCase) {
       setFormData({
         name: testCase.name,
@@ -35,21 +36,21 @@ export default function EditCasePage({
         tags: testCase.tags,
       })
     } else {
-      router.push(`/${params.code}/case`)
+      router.push(`/${unwrappedParams.code}/case`)
     }
-  }, [params.id, params.code, router])
+  }, [unwrappedParams.id, unwrappedParams.code, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: 实现更新逻辑
-    router.push(`/${params.code}/case`)
+    router.push(`/${unwrappedParams.code}/case`)
   }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-6">
         <Link
-          href={`/${params.code}/case`}
+          href={`/${unwrappedParams.code}/case`}
           className="text-gray-600 hover:text-gray-900 flex items-center gap-1"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -186,7 +187,7 @@ export default function EditCasePage({
 
           <div className="flex justify-end space-x-4 pt-4">
             <Link
-              href={`/${params.code}/case`}
+              href={`/${unwrappedParams.code}/case`}
               className="px-4 py-2 border rounded-md hover:bg-gray-50"
             >
               取消

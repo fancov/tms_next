@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ChevronDown, Building2 } from 'lucide-react'
 import { useTenant } from '@/contexts/TenantContext'
 
