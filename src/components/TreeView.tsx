@@ -95,7 +95,7 @@ const TreeViewItem = ({ node, level = 0, searchTerm = '' }: TreeViewItemProps) =
       
       {isExpanded && node.children && (
         <div>
-          {node.children.map((child, index) => (
+          {node.children.map(child => (
             <TreeViewItem
               key={child.id}
               node={child}

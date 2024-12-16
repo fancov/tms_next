@@ -581,8 +581,12 @@ function CasePageContent({
 }: {
   params: { code: string }
 }) {
-  // Unwrap params using React.use()
-  const unwrappedParams = React.use(params)
+  // 2. Custom hooks (including useTenantData which uses useContext internally)
+  const fetchTestCases = useCallback(async (tenantCode: string) => {
+    return testCases.filter(testCase => testCase.tenantCode === tenantCode)
+  }, [])
+
+  const { data: tenantCases, isLoading } = useTenantData<TestCase[]>(fetchTestCases, [])
 
   // 1. All useState hooks first
   const [isResizing, setIsResizing] = useState(false)
@@ -614,13 +618,6 @@ function CasePageContent({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [editingCase, setEditingCase] = useState<TestCase | null>(null)
-
-  // 2. Custom hooks (including useTenantData which uses useContext internally)
-  const fetchTestCases = useCallback(async (tenantCode: string) => {
-    return testCases.filter(testCase => testCase.tenantCode === tenantCode)
-  }, [])
-
-  const { data: tenantCases, isLoading } = useTenantData<TestCase[]>(fetchTestCases, [])
 
   // 3. useCallback hooks
   const startResizing = useCallback((e: React.MouseEvent) => {

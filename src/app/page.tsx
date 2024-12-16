@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation'
 import { useTenant } from '@/contexts/TenantContext'
 import { Search, Clock, Star, Building2 } from 'lucide-react'
 import { MainNav } from '@/components/MainNav'
+import Image from 'next/image'
 
 export default function RootPage() {
   const router = useRouter()
-  const { currentTenant, tenants, setCurrentTenant } = useTenant()
+  const { tenants, setCurrentTenant } = useTenant()
   const [searchQuery, setSearchQuery] = useState('')
   const [recentTenants, setRecentTenants] = useState<typeof tenants>([])
 
@@ -88,10 +89,12 @@ export default function RootPage() {
                   >
                     <div className="flex items-center">
                       {tenant.logo ? (
-                        <img
+                        <Image
                           src={tenant.logo}
                           alt={tenant.name}
-                          className="w-8 h-8 rounded-full"
+                          width={32}
+                          height={32}
+                          className="rounded-full"
                         />
                       ) : (
                         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
@@ -136,10 +139,12 @@ export default function RootPage() {
                     >
                       <div className="flex items-center">
                         {tenant.logo ? (
-                          <img
+                          <Image
                             src={tenant.logo}
                             alt={tenant.name}
-                            className="w-8 h-8 rounded-full"
+                            width={32}
+                            height={32}
+                            className="rounded-full"
                           />
                         ) : (
                           <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
